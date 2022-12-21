@@ -1,0 +1,21 @@
+{
+    "name": "talha/data-generation-bundle",
+    "description": "Generate test data for development and testing",
+    "type": "symfony-bundle",
+    "require": {
+        "php": ">=7.2.5",
+        "symfony/framework-bundle": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Talha\\SymfonyDataGenerationBundle\\": "src/"
+        }
+    },  
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Talha Amir",
+            "email": "talhaamir2018@gmail.com"
+        }
+    ]
+}
