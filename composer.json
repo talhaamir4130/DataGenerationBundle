@@ -1,5 +1,5 @@
 {
-    "name": "talha/data-generation-bundle",
+    "name": "talha-symfony/data-generation-bundle",
     "description": "Generate test data for development and testing",
     "type": "symfony-bundle",
     "require": {
