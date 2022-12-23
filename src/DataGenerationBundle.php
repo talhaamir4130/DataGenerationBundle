@@ -1,6 +1,6 @@
 <?php
 
-namespace Talha\DataGenerationBundle;
+namespace DoctrineFixtures\DataGenerationBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

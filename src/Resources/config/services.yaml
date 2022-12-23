@@ -3,5 +3,5 @@ services:
     autowire: true
     autoconfigure: true
 
-  Talha\DataGenerationBundle\Service\:
+  DoctrineFixtures\DataGenerationBundle\Service\:
     resource: '../../Service'

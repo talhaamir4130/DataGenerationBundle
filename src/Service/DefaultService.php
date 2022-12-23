@@ -1,6 +1,6 @@
 <?php
 
-namespace Talha\DataGenerationBundle\Service;
+namespace DoctrineFixtures\DataGenerationBundle\Service;
 
 class DefaultService
 {
