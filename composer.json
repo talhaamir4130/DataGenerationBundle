@@ -8,7 +8,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Talha\\SymfonyDataGenerationBundle\\": "src/"
+            "Talha\\DataGenerationBundle\\": "src/"
         }
     },  
     "license": "MIT",
