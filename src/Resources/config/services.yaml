@@ -5,3 +5,5 @@ services:
 
   DoctrineFixtures\DataGenerationBundle\Service\:
     resource: '../../Service'
+  DoctrineFixtures\DataGenerationBundle\EventSubscriber\:
+    resource: '../../EventSubscriber'
