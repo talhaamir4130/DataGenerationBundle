@@ -2,31 +2,50 @@
 
 namespace DoctrineFixtures\DataGenerationBundle\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 
 class UserDataGenerationService
 {
-    /**
-     * @return string[]
-     */
-    public function generate(ClassMetadata $class, int $count = 100): array
-    {
-        $tableName = $class->table['name'];
-
-        $queries = [];
-        for ($i = 0; $i < $count; $i++) {
-            $email = uniqid() . '@example.com';
-            $password = uniqid();
-            $roles = json_encode(['ROLE_USER']);
-
-            $queries[] = $this->generateQuery($tableName, $email, $password, $roles);
-        }
-
-        return $queries;
+    public function __construct(
+        private EntityManagerInterface $entityManager
+    ) {  
     }
 
-    private function generateQuery(string $tableName, string $email, string $password, string $roles): string
+    /**
+     * @param mixed[] $userConfig
+     */
+    public function generate(array $userConfig): void
     {
-        return "INSERT INTO $tableName (email, password, roles) VALUES ('$email', '$password', '$roles');";
+        $className = $userConfig['namespace'];
+
+        for ($i = 0; $i < $userConfig['rows']; $i++) {
+            $email = uniqid() . '@example.com';
+            $password = uniqid();
+
+            $user = new $className();
+            $user->setEmail($email);
+            $user->setPassword($password);
+            $user->setRoles($this->getRandomRoles($userConfig['defined_roles']));
+
+            $this->entityManager->persist($user);
+        }
+    }
+
+    /**
+     * @param string[] $definedRoles
+     * 
+     * @return string[]
+     */
+    private function getRandomRoles(array $definedRoles): array
+    {
+        $totalRoles = count($definedRoles);
+        $randomCount = rand(1, $totalRoles);
+        $roles = [];
+        for ($i=0; $i < $randomCount; $i++) { 
+            $roles[] = $definedRoles[rand(0, $totalRoles - 1)];
+        }
+
+        return $roles;
     }
 }

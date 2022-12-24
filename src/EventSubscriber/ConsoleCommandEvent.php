@@ -7,6 +7,7 @@ use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Console\Event\ConsoleCommandEvent as SymfonyConsoleCommandEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Yaml\Yaml;
 
 class ConsoleCommandEvent implements EventSubscriberInterface
 {
@@ -29,7 +30,13 @@ class ConsoleCommandEvent implements EventSubscriberInterface
 
         if ($command->getName() === 'doctrine:fixtures:load') {
             $this->dispatcher->addListener(ConsoleEvents::TERMINATE, function () {
-                $this->mainService->generateData();
+                try {
+                    $yamlValues = Yaml::parseFile(getcwd().'/fixtures-config.yml');
+                } catch (\Exception $e) {
+                    throw new \Exception('fixtures-config.yml file not found!');
+                }
+
+                $this->mainService->generateData($yamlValues);
 
                 echo PHP_EOL . 'Data generated!' . PHP_EOL;
             });

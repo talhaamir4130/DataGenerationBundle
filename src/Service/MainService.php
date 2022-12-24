@@ -4,6 +4,7 @@ namespace DoctrineFixtures\DataGenerationBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use DoctrineFixtures\DataGenerationBundle\Service\UserDataGenerationService;
+use Symfony\Component\Yaml\Yaml;
 
 class MainService
 {
@@ -13,26 +14,18 @@ class MainService
     ) {  
     }
 
-    public function generateData(): void
+    /**
+     * @param mixed[] $yamlValues
+     */
+    public function generateData(array $yamlValues): void
     {
-        $metaData = $this->entityManager->getMetadataFactory()->getAllMetadata();
+        // Insert Users
+        $this->userDataGenerationSrv->generate($yamlValues['user']);
 
-        $queries = [];
-        foreach ($metaData as $class) {
-            if ($class->getName() == 'App\Entity\User') {
-                $queries = array_merge($queries, $this->userDataGenerationSrv->generate($class));
-            }
-        }
+        // $metaData = $this->entityManager->getMetadataFactory()->getAllMetadata();
+        // foreach ($metaData as $class) {
+        // }
 
-        $this->insertData($queries);
-    }
-
-    private function insertData(array $queries): void
-    {
-        $connection = $this->entityManager->getConnection();
-        foreach ($queries as $query) {
-            $statement = $connection->prepare($query);
-            $statement->executeQuery();
-        }
+        $this->entityManager->flush();
     }
 }
