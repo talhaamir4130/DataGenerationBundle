@@ -22,8 +22,7 @@ user:
 entities:
   article:
     namespace: App\Entity\Article
-    construct:
-      - App\Entity\User
+    construct: true # Expects some class as constructor argument
     rows: 100
   article_page:
     namespace: App\Entity\ArticlePage

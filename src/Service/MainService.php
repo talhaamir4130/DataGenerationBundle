@@ -28,9 +28,9 @@ class MainService
         ];
         foreach ($yamlValues['entities'] as $entityConfig) {
             $namespace = $entityConfig['namespace'];
-            $construct = [];
+            $construct = false;
             if (isset($entityConfig['construct'])) {
-                $construct =$entityConfig['construct'];
+                $construct = true;
             }
 
             for ($i=0; $i < $entityConfig['rows']; $i++) {
@@ -44,14 +44,13 @@ class MainService
     }
 
     /**
-     * @param mixed[] $construct
      * @param mixed[] $entities
      * 
      * @return mixed
      */
-    private function createClass(string $namespace, array $construct, array $entities): mixed
+    private function createClass(string $namespace, bool $construct, array $entities): mixed
     {
-        if (empty($construct)) {
+        if (!$construct) {
             $class = new $namespace();
 
             return $class;
