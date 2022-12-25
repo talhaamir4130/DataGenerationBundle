@@ -18,7 +18,16 @@ user:
     - ROLE_ADMIN
     - ROLE_SUPER_ADMIN
     - ROLE_ALLOWED_TO_SWITCH
-  rows: 10
+  rows: 500
+entities:
+  article:
+    namespace: App\Entity\Article
+    construct:
+      - App\Entity\User
+    rows: 100
+  article_page:
+    namespace: App\Entity\ArticlePage
+    rows: 60
 
 ```
 

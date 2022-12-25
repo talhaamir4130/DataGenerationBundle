@@ -3,7 +3,6 @@
 namespace DoctrineFixtures\DataGenerationBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\Mapping\ClassMetadata;
 
 class UserDataGenerationService
 {
@@ -14,9 +13,12 @@ class UserDataGenerationService
 
     /**
      * @param mixed[] $userConfig
+     * 
+     * @return mixed[]
      */
-    public function generate(array $userConfig): void
+    public function generate(array $userConfig): array
     {
+        $users = [];
         $className = $userConfig['namespace'];
 
         for ($i = 0; $i < $userConfig['rows']; $i++) {
@@ -28,8 +30,11 @@ class UserDataGenerationService
             $user->setPassword($password);
             $user->setRoles($this->getRandomRoles($userConfig['defined_roles']));
 
+            $users[] = $user;
             $this->entityManager->persist($user);
         }
+
+        return $users;
     }
 
     /**
@@ -43,7 +48,10 @@ class UserDataGenerationService
         $randomCount = rand(1, $totalRoles);
         $roles = [];
         for ($i=0; $i < $randomCount; $i++) { 
-            $roles[] = $definedRoles[rand(0, $totalRoles - 1)];
+            $role = $definedRoles[rand(0, $totalRoles - 1)];
+            if (!in_array($role, $roles)) {
+                $roles[] = $role;
+            }
         }
 
         return $roles;
