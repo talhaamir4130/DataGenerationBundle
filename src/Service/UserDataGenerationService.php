@@ -3,11 +3,13 @@
 namespace DoctrineFixtures\DataGenerationBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use DoctrineFixtures\DataGenerationBundle\Service\ClassMetaData;
 
 class UserDataGenerationService
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private ClassMetaData $classMetaData
     ) {  
     }
 
@@ -22,12 +24,11 @@ class UserDataGenerationService
         $className = $userConfig['namespace'];
 
         for ($i = 0; $i < $userConfig['rows']; $i++) {
-            $email = uniqid() . '@example.com';
-            $password = uniqid();
-
             $user = new $className();
-            $user->setEmail($email);
-            $user->setPassword($password);
+            $settersWithData = $this->classMetaData->getSetterWithData($className);
+            foreach ($settersWithData as $setter => $data) {
+                $user->$setter($data);
+            }
             $user->setRoles($this->getRandomRoles($userConfig['defined_roles']));
 
             $users[] = $user;
