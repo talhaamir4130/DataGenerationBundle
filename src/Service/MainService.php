@@ -5,12 +5,14 @@ namespace DoctrineFixtures\DataGenerationBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use DoctrineFixtures\DataGenerationBundle\Service\UserDataGenerationService;
 use ReflectionClass;
+use DoctrineFixtures\DataGenerationBundle\Service\ClassMetaData;
 
 class MainService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private UserDataGenerationService $userDataGenerationSrv
+        private UserDataGenerationService $userDataGenerationSrv,
+        private ClassMetaData $classMetaData
     ) {  
     }
 
@@ -35,6 +37,11 @@ class MainService
 
             for ($i=0; $i < $entityConfig['rows']; $i++) {
                 $class = $this->createClass($namespace, $construct, $entities);
+                $settersWithData = $this->classMetaData->getSetterWithData($namespace);
+                foreach ($settersWithData as $setter => $data) {
+                    $class->$setter($data);
+                }
+
                 $entities[$namespace][] = $class;
                 $this->entityManager->persist($class);
             }

@@ -75,6 +75,8 @@ class ClassMetaData
                 return 1;
             case 'datetime':
                 return new \DateTime();
+            case 'datetime_immutable':
+                return new \DateTimeImmutable();
             case 'boolean':
                 return true;
             case 'array':
